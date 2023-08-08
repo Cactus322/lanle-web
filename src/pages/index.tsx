@@ -1,61 +1,110 @@
+import { useRef, useState, useEffect } from 'react'
+
 import styles from '../app/page.module.css'
+import { ReactReader } from 'react-reader'
+import { Contents } from 'epubjs'
+import { Button } from '@mui/material'
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+	interface ISelectedText {
+		text: string
+		cfiRange: string
+	}
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+	const [selections, setSelections] = useState<ISelectedText[]>([])
+	const renditionRef = useRef<any>(null)
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+	const setRenderSelection = (cfiRange: string, contents: any) => {
+		if (renditionRef.current) {
+			setSelections(
+				selections.concat({
+					text: renditionRef.current.getRange(cfiRange).toString(),
+					cfiRange,
+				})
+			)
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+			renditionRef.current.annotations.add(
+				'highlight',
+				cfiRange,
+				{},
+				null,
+				'hl',
+				{
+					fill: 'red',
+					'fill-opacity': '0.5',
+					'mix-blend-mode': 'multiply',
+				}
+			)
+			contents.window.getSelection().removeAllRanges()
+		}
+	}
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+	useEffect(() => {
+		if (renditionRef.current) {
+			renditionRef.current.on('selected', setRenderSelection)
+			return () => {
+				renditionRef.current.off('selected', setRenderSelection)
+			}
+		}
+	}, [setSelections, selections])
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+	return (
+		<>
+			<div>
+				<Button variant="contained">Hello World</Button>
+			</div>
+			<div style={{ height: '100vh' }}>
+				<ReactReader
+					url="https://react-reader.metabits.no/files/alice.epub"
+					getRendition={(rendition) => {
+						renditionRef.current = rendition
+						renditionRef.current.themes.default({
+							'::selection': {
+								background: 'orange',
+							},
+						})
+						setSelections([])
+					}}
+				/>
+			</div>
+			<div
+				style={{
+					position: 'absolute',
+					bottom: '1rem',
+					right: '1rem',
+					zIndex: 1,
+					backgroundColor: 'white',
+				}}
+			>
+				Selection:
+				<ul>
+					{selections.map(({ text, cfiRange }, i: number) => (
+						<li key={i}>
+							{text}{' '}
+							<button
+								onClick={() => {
+									renditionRef.current.display(cfiRange)
+								}}
+							>
+								Show
+							</button>
+							<button
+								onClick={() => {
+									renditionRef.current.annotations.remove(
+										cfiRange,
+										'highlight'
+									)
+									setSelections(
+										selections.filter((item, j) => j !== i)
+									)
+								}}
+							>
+								x
+							</button>
+						</li>
+					))}
+				</ul>
+			</div>
+		</>
+	)
 }
