@@ -73,11 +73,7 @@ export default function Home() {
 	}
 
 	return (
-		<Provider store={store}>
-			<ThemeProvider theme={theme}>
-				<Login />
-			</ThemeProvider>{' '}
-		</Provider>
+		<Login />
 
 		// <>
 		// <form>

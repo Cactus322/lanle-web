@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { addUser } from '@/reducers/loginReducer'
+import { switchToRegistration } from '@/reducers/registrationReduser'
 
 import {
 	Box,
@@ -9,10 +10,19 @@ import {
 	InputLabel,
 	OutlinedInput,
 } from '@mui/material'
-import { addUserFunction } from './types'
+import { addUserFunctionType, switchToRegistrationType } from './Login.types'
+import registrationService from '@/services/registration'
+import { IUser } from '@/types'
 
-
-const Login = ({ addUser }: { addUser: addUserFunction }) => {
+const Login = ({
+	addUser,
+	switchToRegistration,
+	registration,
+}: {
+	addUser: addUserFunctionType
+	switchToRegistration: switchToRegistrationType
+	registration: boolean
+}) => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
@@ -22,14 +32,28 @@ const Login = ({ addUser }: { addUser: addUserFunction }) => {
 		try {
 			addUser({ username, password })
 		} catch (exception) {
-			console.log('Wrong credentials')
+			console.error('Wrong credentials')
+		}
+	}
+
+	switchToRegistration(false)
+
+	const handleRegistration = async (e: React.FormEvent) => {
+		e.preventDefault
+
+		try {
+			await registrationService.registration({ username, password })
+			addUser({ username, password })
+		} catch (exception) {
+			console.error('Wrong credentials')
 		}
 	}
 
 	return (
+		//Интересная ошибка. Если button type = submit, то при попытке зарегистрировать пользователя, 
+		//получаем ошибку RequsetAborted
 		<Box
 			component="form"
-			onSubmit={handleLogin}
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -64,15 +88,26 @@ const Login = ({ addUser }: { addUser: addUserFunction }) => {
 					onChange={({ target }) => setPassword(target.value)}
 				/>
 			</FormControl>
-			<Button variant="outlined" type="submit">
-				Login
+			<Button
+				variant="outlined"
+				type="button"
+				onClick={registration ? handleRegistration : handleLogin}
+			>
+				{registration ? 'Registration' : 'Login'}
 			</Button>
 		</Box>
 	)
 }
 
-const mapDispatchProps = {
-	addUser,
+const mapStateToProps = ({ registration }: { registration: boolean }) => {
+	return {
+		registration: registration,
+	}
 }
 
-export default connect(null, mapDispatchProps)(Login)
+const mapDispatchProps = {
+	addUser,
+	switchToRegistration,
+}
+
+export default connect(mapStateToProps, mapDispatchProps)(Login)

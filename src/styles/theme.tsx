@@ -6,6 +6,9 @@ const theme = createTheme({
         primary: {
             main: '#5893df',
         },
+        background: {
+            default: '#1d1d2f',
+        },
     },
 	components: {
 		MuiOutlinedInput: {

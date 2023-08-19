@@ -1,7 +1,7 @@
 import { Dispatch, PayloadAction, createSlice } from '@reduxjs/toolkit'
 import loginService from '@/services/login'
 import { IUser } from '@/types'
-import { ILoginSlice } from './loginReducer.types'
+import { ILoginSliceCreate } from './loginReducer.types'
 
 const loginSlice = createSlice({
 	name: 'login',
@@ -16,11 +16,10 @@ const loginSlice = createSlice({
 	},
 })
 
-export const {create, remove} = loginSlice.actions
-
+export const { create, remove } = loginSlice.actions
 
 export const addUser = (credential: IUser) => {
-	return async (dispatch: Dispatch<ILoginSlice>) => {
+	return async (dispatch: Dispatch<ILoginSliceCreate>) => {
 		const user = await loginService.login(credential)
 		window.localStorage.setItem('loggedUser', JSON.stringify(user))
 		dispatch(create(user))
