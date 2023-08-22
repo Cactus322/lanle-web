@@ -11,6 +11,13 @@ const theme = createTheme({
         },
     },
 	components: {
+        MuiCssBaseline: {
+            styleOverrides: () => ({
+                body: {
+                    // padding: "20px",
+                }
+            })
+        },
 		MuiOutlinedInput: {
 			styleOverrides: {
 				root: {

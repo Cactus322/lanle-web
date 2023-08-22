@@ -9,8 +9,9 @@ import Login from './Login/Login'
 import theme from '../styles/theme'
 import { Provider } from 'react-redux'
 import store  from '@/app/store'
+import Home from './Home/Home'
 
-export default function Home() {
+export default function Index() {
 	interface ISelectedText {
 		text: string
 		cfiRange: string
@@ -73,7 +74,7 @@ export default function Home() {
 	}
 
 	return (
-		<Login />
+		<Home />
 
 		// <>
 		// <form>

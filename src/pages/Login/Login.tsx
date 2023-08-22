@@ -12,7 +12,6 @@ import {
 } from '@mui/material'
 import { addUserFunctionType, switchToRegistrationType } from './Login.types'
 import registrationService from '@/services/registration'
-import { IUser } from '@/types'
 
 const Login = ({
 	addUser,
