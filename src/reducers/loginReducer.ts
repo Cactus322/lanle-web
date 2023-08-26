@@ -5,18 +5,15 @@ import { ILoginSliceCreate } from './loginReducer.types'
 
 const loginSlice = createSlice({
 	name: 'login',
-	initialState: {},
+	initialState: '',
 	reducers: {
 		create(_state, action: PayloadAction<string>) {
 			return action.payload
 		},
-		remove() {
-			return ''
-		},
 	},
 })
 
-export const { create, remove } = loginSlice.actions
+export const { create } = loginSlice.actions
 
 export const addUser = (credential: IUser) => {
 	return async (dispatch: Dispatch<ILoginSliceCreate>) => {
@@ -24,6 +21,13 @@ export const addUser = (credential: IUser) => {
 		window.localStorage.setItem('loggedUser', JSON.stringify(user))
 		dispatch(create(user))
 	}
+}
+
+export const removeUserInfo = () => {
+    return (dispatch: Dispatch<ILoginSliceCreate>) => {
+        window.localStorage.clear()
+        dispatch(create(''))
+    }
 }
 
 export default loginSlice.reducer

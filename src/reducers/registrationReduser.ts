@@ -3,7 +3,7 @@ import { ILoginSliceRegistration } from './registrationReducer.types'
 
 const loginSlice = createSlice({
 	name: 'registration',
-	initialState: {},
+	initialState: false,
 	reducers: {
 		registration(_state, action: PayloadAction<boolean>) {
 			return action.payload
