@@ -18,7 +18,6 @@ const Notice = ({ notice }: { notice: INoticeActionCreate }) => {
 }
 
 const mapStateToProps = ({ notice }: { notice: INoticeActionCreate }) => {
-	console.log(notice)
 	return {
 		notice: notice,
 	}

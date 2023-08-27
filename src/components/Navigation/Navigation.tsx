@@ -10,7 +10,8 @@ import PersonIcon from '@mui/icons-material/Person'
 import { useState } from 'react'
 import { switchToRegistration } from '@/reducers/registrationReduser'
 import { connect } from 'react-redux'
-import { switchToRegistrationType } from '@/pages/Login/Login.types'
+import { switchToRegistrationType } from '@/pages/login/Login.types'
+import Link from 'next/link'
 
 const Navigation = ({
 	switchToRegistration,
@@ -57,10 +58,10 @@ const Navigation = ({
 					}}
 				>
 					<MenuItem onClick={() => switchToRegistration(false)}>
-						Login
+						<Link href="/login">Login</Link>
 					</MenuItem>
 					<MenuItem onClick={() => switchToRegistration(true)}>
-						Sign In
+						<Link href="/login">Sign In</Link>
 					</MenuItem>
 				</Menu>
 			</Toolbar>

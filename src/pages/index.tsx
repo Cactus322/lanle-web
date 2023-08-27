@@ -1,15 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
 
-import styles from '../app/page.module.css'
 import { ReactReader } from 'react-reader'
 import { Contents } from 'epubjs'
-import { Button, CssBaseline, ThemeProvider } from '@mui/material'
 import { FileUploader } from '@/components/FileUploader/FileUploader'
-import Login from './Login/Login'
-import theme from '../styles/theme'
-import { Provider } from 'react-redux'
-import store  from '@/app/store'
-import Home from './Home/Home'
+import Home from './home/Home'
 
 export default function Index() {
 	interface ISelectedText {

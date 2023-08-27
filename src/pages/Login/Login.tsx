@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { addUser } from '@/reducers/loginReducer'
-import { switchToRegistration } from '@/reducers/registrationReduser'
 
 import {
 	Box,
@@ -15,11 +14,9 @@ import registrationService from '@/services/registration'
 
 const Login = ({
 	addUser,
-	switchToRegistration,
 	registration,
 }: {
 	addUser: addUserFunctionType
-	switchToRegistration: switchToRegistrationType
 	registration: boolean
 }) => {
 	const [username, setUsername] = useState('')
@@ -34,8 +31,6 @@ const Login = ({
 			console.error('Wrong credentials')
 		}
 	}
-
-	switchToRegistration(false)
 
 	const handleRegistration = async (e: React.FormEvent) => {
 		e.preventDefault
@@ -106,7 +101,6 @@ const mapStateToProps = ({ registration }: { registration: boolean }) => {
 
 const mapDispatchProps = {
 	addUser,
-	switchToRegistration,
 }
 
 export default connect(mapStateToProps, mapDispatchProps)(Login)
