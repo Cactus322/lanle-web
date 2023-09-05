@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { connect } from 'react-redux'
 import { addUser } from '@/reducers/loginReducer'
-
+import { setNotice } from '@/reducers/noticeReducer'
+import { addUserFunctionType } from './Login.types'
+import registrationService from '@/services/registration'
 import {
 	Box,
 	Button,
@@ -9,8 +11,6 @@ import {
 	InputLabel,
 	OutlinedInput,
 } from '@mui/material'
-import { addUserFunctionType, switchToRegistrationType } from './Login.types'
-import registrationService from '@/services/registration'
 
 const Login = ({
 	addUser,
@@ -28,7 +28,7 @@ const Login = ({
 		try {
 			addUser({ username, password })
 		} catch (exception) {
-			console.error('Wrong credentials')
+			setNotice('Wrong credentials', 3, 'error')
 		}
 	}
 
@@ -44,7 +44,7 @@ const Login = ({
 	}
 
 	return (
-		//Интересная ошибка. Если button type = submit, то при попытке зарегистрировать пользователя, 
+		//Интересная ошибка. Если button type = submit, то при попытке зарегистрировать пользователя,
 		//получаем ошибку RequsetAborted
 		<Box
 			component="form"
@@ -101,6 +101,7 @@ const mapStateToProps = ({ registration }: { registration: boolean }) => {
 
 const mapDispatchProps = {
 	addUser,
+	setNotice,
 }
 
 export default connect(mapStateToProps, mapDispatchProps)(Login)

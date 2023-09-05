@@ -8,6 +8,8 @@ export const Home = () => {
 		<Box>
 			<Navigation />
 			<Notice />
+
+			<Link href="/addBook">Add Book</Link>
 		</Box>
 	)
 }
