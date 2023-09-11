@@ -18,3 +18,5 @@ export const addBook = (credential: string) => {
         dispatch(create(credential))
     }
 }
+
+export default bookSlice.reducer
