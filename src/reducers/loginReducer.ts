@@ -19,25 +19,26 @@ export const addUser = (credential: IUser) => {
 	return async (dispatch: Dispatch<IDispatchLoginString>) => {
 		const user = await loginService.login(credential)
 		if (user.error) {
-			dispatch(create({type: 'error', state: user.error}))
+			dispatch(create({ type: 'error', state: user.error }))
 		} else {
 			window.localStorage.setItem('loggedUser', JSON.stringify(user))
 			if (user) {
-				dispatch(create({type: 'token', state: user}))
-			} 
+				dispatch(create({ type: 'token', state: user }))
+			}
 		}
-		
 	}
 }
 
 export const removeUserInfo = () => {
-    return (dispatch: Dispatch<IDispatchLoginString>) => {
-        window.localStorage.clear()
-        dispatch(create({
-			type: null,
-			state: null
-		}))
-    }
+	return (dispatch: Dispatch<IDispatchLoginString>) => {
+		window.localStorage.clear()
+		dispatch(
+			create({
+				type: null,
+				state: null,
+			})
+		)
+	}
 }
 
 export default loginSlice.reducer
