@@ -1,4 +1,4 @@
 export interface IDispatchDefaultString {
-    payload: string
+    payload: string | null
     type: string
 }

@@ -2,8 +2,11 @@ import Head from 'next/head'
 import { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
+
 import theme from '@/styles/theme'
 import store from '@/app/store'
+import Notice from '@/components/Notice/Notice'
+import Navigation from '@/components/Navigation/Navigation'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
@@ -25,6 +28,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<Provider store={store}>
+					<Navigation />
+					<Notice />
 					<Component {...pageProps} />
 				</Provider>
 			</ThemeProvider>

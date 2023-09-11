@@ -19,12 +19,11 @@ export const setNotice = (
 	removeTimeout: number,
 	type: AlertColor
 ) => {
-	return async (dispatch: Dispatch<INoticeSliceCreate>) => {
+	return (dispatch: Dispatch<INoticeSliceCreate>) => {
 		const removeTimeoutMsec = removeTimeout * 1000
-
-		// window.clearTimeout()
+		
 		dispatch(createNotice({ content: notice, type: type }))
-		setTimeout(() => dispatch(createNotice({content: '', type: undefined})), removeTimeoutMsec)
+		setTimeout(() => dispatch(createNotice({})), removeTimeoutMsec)
 	}
 }
 

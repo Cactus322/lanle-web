@@ -3,6 +3,7 @@ import { Alert } from '@mui/material'
 import { connect } from 'react-redux'
 
 const Notice = ({ notice }: { notice: INoticeActionCreate }) => {
+
 	if (Object.keys(notice).length === 0) {
         return null
     } 

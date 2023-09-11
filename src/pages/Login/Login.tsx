@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { addUser } from '@/reducers/loginReducer'
 import { setNotice } from '@/reducers/noticeReducer'
-import { addUserFunctionType } from './Login.types'
+import { addUserFunctionType, setNoticeFunctionType } from './Login.types'
 import registrationService from '@/services/registration'
 import {
 	Box,
@@ -11,25 +11,32 @@ import {
 	InputLabel,
 	OutlinedInput,
 } from '@mui/material'
+import { ILoginSlice } from '@/reducers/loginReducer.types'
 
 const Login = ({
 	addUser,
+	setNotice,
 	registration,
+	login,
 }: {
 	addUser: addUserFunctionType
+	setNotice: setNoticeFunctionType
 	registration: boolean
+	login: ILoginSlice
 }) => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
-	const handleLogin = async (e: React.FormEvent) => {
-		e.preventDefault()
-
-		try {
-			addUser({ username, password })
-		} catch (exception) {
+	useEffect(() => {
+		if (login.type === 'error') {
 			setNotice('Wrong credentials', 3, 'error')
 		}
+	}, [login])
+
+	const handleLogin = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		addUser({ username, password })
 	}
 
 	const handleRegistration = async (e: React.FormEvent) => {
@@ -93,9 +100,10 @@ const Login = ({
 	)
 }
 
-const mapStateToProps = ({ registration }: { registration: boolean }) => {
+const mapStateToProps = ({ registration, login }: { registration: boolean, login: ILoginSlice }) => {
 	return {
 		registration: registration,
+		login: login
 	}
 }
 
