@@ -32,12 +32,7 @@ export const addUser = (credential: IUser) => {
 export const removeUserInfo = () => {
 	return (dispatch: Dispatch<IDispatchLoginString>) => {
 		window.localStorage.clear()
-		dispatch(
-			create({
-				type: null,
-				state: null,
-			})
-		)
+		dispatch(create({}))
 	}
 }
 

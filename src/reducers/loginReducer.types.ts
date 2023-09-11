@@ -1,6 +1,6 @@
 export interface ILoginSlice {
-    type: string | null
-    state: string | null
+    type?: string
+    state?: string
 }
 
 export interface IDispatchLoginString {
