@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { addUser } from '@/reducers/loginReducer'
 import { setNotice } from '@/reducers/noticeReducer'
-import { addUserFunctionType, setNoticeFunctionType } from './Login.types'
 import registrationService from '@/services/registration'
+
+import { addUserFunctionType } from './Login.types'
+import { setNoticeFunctionType } from '@/types'
+
 import {
 	Box,
 	Button,
@@ -53,22 +56,7 @@ const Login = ({
 	return (
 		//Интересная ошибка. Если button type = submit, то при попытке зарегистрировать пользователя,
 		//получаем ошибку RequsetAborted
-		<Box
-			component="form"
-			sx={{
-				display: 'flex',
-				flexDirection: 'column',
-				gap: 3,
-				width: 250,
-				m: '0 auto',
-				position: 'absolute',
-				top: '50%',
-				left: '50%',
-				transform: 'translate(-50%, 50%)',
-				borderColor: 'palegreen',
-			}}
-			autoComplete="true"
-		>
+		<Box component="form" className="position center" autoComplete="true">
 			<FormControl>
 				<InputLabel htmlFor="login-username">Username</InputLabel>
 				<OutlinedInput
@@ -100,10 +88,16 @@ const Login = ({
 	)
 }
 
-const mapStateToProps = ({ registration, login }: { registration: boolean, login: ILoginSlice }) => {
+const mapStateToProps = ({
+	registration,
+	login,
+}: {
+	registration: boolean
+	login: ILoginSlice
+}) => {
 	return {
 		registration: registration,
-		login: login
+		login: login,
 	}
 }
 
