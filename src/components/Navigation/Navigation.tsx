@@ -1,10 +1,10 @@
 import {
 	AppBar,
 	Toolbar,
-	Typography,
 	Button,
 	Menu,
 	MenuItem,
+	Link as MUILink,
 } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import { useState } from 'react'
@@ -30,14 +30,17 @@ const Navigation = ({
 	return (
 		<AppBar position="static">
 			<Toolbar variant="dense">
-				<Typography
+				<MUILink
 					variant="h6"
-					color="inherit"
-					component="div"
-					sx={{ flexGrow: 1 }}
+					component={Link}
+					href="/"
+					sx={{ 
+						flexGrow: 1,
+						color: 'black'
+					}}
 				>
 					Lanle WEB
-				</Typography>
+				</MUILink>
 				<Button
 					color="inherit"
 					id="basic-button"

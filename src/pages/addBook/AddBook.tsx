@@ -1,43 +1,61 @@
-import { Box, FormControl, InputLabel, OutlinedInput } from "@mui/material"
-import { useState } from "react"
-import { connect } from "react-redux"
-import { addBook } from "@/reducers/bookReducer"
-import { error } from "console"
+import {
+	Box,
+	Button,
+	FormControl,
+	InputLabel,
+	OutlinedInput,
+} from '@mui/material'
+import { useState } from 'react'
+import { connect } from 'react-redux'
+import { addBook } from '@/reducers/bookReducer'
+import { setNotice } from '@/reducers/noticeReducer'
 
-const AddBook = () => {
-    const [bookLink, setBookLink] = useState('')
-    
-    const handleSubmit =async (e: React.FormEvent) => {
-        e.preventDefault()
+import { setNoticeFunctionType } from '@/types'
+import { addBookFunctionType } from './AddBook.types'
 
-        try {
-            addBook(bookLink)
-        } catch (exception) {
-            console.error('Wrong link')
-        }
-    }
+const AddBook = ({
+	addBook,
+	setNotice,
+}: {
+	addBook: addBookFunctionType
+	setNotice: setNoticeFunctionType
+}) => {
+	const [bookLink, setBookLink] = useState('')
 
-    return (
-        <Box component="form">
-            <FormControl
-                onSubmit={handleSubmit}
-            >
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+
+		addBook(bookLink)
+		setNotice('Book is added', 3, 'success')
+	}
+
+	return (
+		<Box
+			component="form"
+			className="position center"
+			onSubmit={handleSubmit}
+		>
+			<FormControl>
 				<InputLabel htmlFor="login-username">Link</InputLabel>
 				<OutlinedInput
 					id="login-username"
 					type="text"
 					label="Link"
-                    placeholder="Enter a link to the book"
-                    value={bookLink}
-                    onChange={({target}) => setBookLink(target.value)}
+					placeholder="Enter a link to the book"
+					value={bookLink}
+					onChange={({ target }) => setBookLink(target.value)}
 				/>
 			</FormControl>
-        </Box>
-    )
+			<Button type="submit" variant="outlined">
+				Hoba
+			</Button>
+		</Box>
+	)
 }
 
 const mapDispatchProps = {
 	addBook,
+	setNotice,
 }
 
 export default connect(null, mapDispatchProps)(AddBook)

@@ -3,10 +3,12 @@ import { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 
-import theme from '@/styles/theme'
+import theme from '@/styles/theme/theme'
 import store from '@/app/store'
 import Notice from '@/components/Notice/Notice'
 import Navigation from '@/components/Navigation/Navigation'
+
+import '../app/globals.css'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
