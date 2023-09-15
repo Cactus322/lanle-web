@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { ILoginSlice } from "@/reducers/loginReducer.types";
 import loginService from "@/services/login";
+import { useRouter } from "next/router";
 
 const Login = ({
   addUser,
@@ -28,38 +29,24 @@ const Login = ({
   registration: boolean;
   login: ILoginSlice;
 }) => {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (login.type === "error") {
       setNotice("Wrong credentials", 3, "error");
+    } else if (login.type === "token") {
+      router.push("/");
     }
   }, [login]);
-
-  console.log(login)
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      // await loginService.login({ username, password })
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
+      await loginService.login({ username, password });
       addUser({ username, password });
-      setUser(user.username);
       setUsername("");
       setPassword("");
     } catch (err) {
@@ -77,8 +64,6 @@ const Login = ({
       console.error("Wrong credentials");
     }
   };
-
-  // console.log(registration, login.state?.username)
 
   return (
     //Интересная ошибка. Если button type = submit, то при попытке зарегистрировать пользователя,

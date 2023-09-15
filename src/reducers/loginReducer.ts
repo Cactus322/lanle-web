@@ -23,14 +23,14 @@ export const addUser = (credential: IUser) => {
 		} else {
 			window.localStorage.setItem('loggedUser', JSON.stringify(user))
 			if (user) {
-				dispatch(create({ type: 'token', state: user }))
+				dispatch(create({ type: 'token', state: user.username }))
 			}
 		}
 	}
 }
 
 export const removeUserInfo = () => {
-	return (dispatch: Dispatch<IDispatchLoginString>) => {
+	return (dispatch: Dispatch<any>) => {
 		window.localStorage.clear()
 		dispatch(create({}))
 	}
