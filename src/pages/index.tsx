@@ -4,6 +4,10 @@ import { ReactReader } from 'react-reader'
 import { Contents } from 'epubjs'
 import { FileUploader } from '@/components/FileUploader/FileUploader'
 import Home from './home/Home'
+import { GetServerSideProps } from 'next'
+import { wrapper } from '@/app/store'
+import axios from 'axios'
+import { addBook, create } from '@/reducers/bookReducer'
 
 export default function Index() {
 	interface ISelectedText {
@@ -132,3 +136,11 @@ export default function Index() {
 		// </>
 	)
 }
+
+export const getServerSideProps: GetServerSideProps =
+	wrapper.getServerSideProps((store) => async (ctx) => {
+		// store.dispatch(create('123'))
+
+		return { props: {
+		} }
+	})

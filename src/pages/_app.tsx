@@ -4,13 +4,15 @@ import { Provider } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 
 import theme from '@/styles/theme/theme'
-import store from '@/app/store'
+// import store from '@/app/store'
 import Notice from '@/components/Notice/Notice'
 import Navigation from '@/components/Navigation/Navigation'
 
 import '../app/globals.css'
+import { Providers } from '@/app/provider'
+import { wrapper } from '@/app/store'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Head>
@@ -29,12 +31,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 			</Head>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Provider store={store}>
+				{/* <Provider store={store}> */}
 					<Navigation />
 					<Notice />
 					<Component {...pageProps} />
-				</Provider>
+					
+				{/* </Provider> */}
 			</ThemeProvider>
 		</>
 	)
 }
+
+export default wrapper.withRedux(MyApp)
