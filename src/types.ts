@@ -5,6 +5,10 @@ export interface IUser {
     password: string
 }
 
+export interface IBook {
+	bookUrl: string
+}
+
 export type setNoticeFunctionType = (
 	notice: string,
 	removeTimeout: number,
