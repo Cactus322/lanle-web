@@ -7,7 +7,6 @@ import Home from './home/Home'
 import { GetServerSideProps } from 'next'
 import { wrapper } from '@/app/store'
 import axios from 'axios'
-import { addBook, create } from '@/reducers/bookReducer'
 
 export default function Index() {
 	interface ISelectedText {

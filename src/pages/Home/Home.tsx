@@ -4,7 +4,8 @@ import Link from 'next/link'
 export const Home = () => {
 	return (
 		<Box>
-			<Link href="/addBook">Add Book</Link>
+			<Link href="/add-book">Add Book</Link>
+			<Link href="/books-list">My books</Link>
 		</Box>
 	)
 }

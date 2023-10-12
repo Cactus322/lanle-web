@@ -53,7 +53,7 @@ export const Reader = ({book} : {book: string}) => {
 		<>
 			<Box sx={{ height: '100vh' }}>
 				<ReactReader
-					url="https://react-reader.metabits.no/files/alice.epub"
+					url={book}
 					getRendition={(rendition) => {
 						renditionRef.current = rendition
 						renditionRef.current.themes.default({
@@ -107,10 +107,10 @@ export const Reader = ({book} : {book: string}) => {
 	)
 }
 
-const mapStateToProps = ({ book }: { book: string }) => {
-	return {
-		book: book,
-	}
-}
+// const mapStateToProps = ({ book }: { book: string }) => {
+// 	return {
+// 		book: book,
+// 	}
+// }
 
-export default connect(mapStateToProps, null)(Reader)
+export default connect(null, null)(Reader)

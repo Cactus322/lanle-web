@@ -2,23 +2,26 @@ import { IBook } from '@/types'
 import axios from 'axios'
 const baseUrl = 'http://localhost:3030/api/books'
 
-let token: string | null = null
-
-const setToken = (newToken: string) => {
-	token = `bearer ${newToken}`
+if (typeof window !== 'undefined') {
+	console.log(localStorage.getItem('loggedUser'));
 }
 
-const config = {
-	headers: { Authorization: token },
+const getAll = async (token: string | null) => {
+	const config = {
+		headers: { Authorization: token },
+	}
+
+	const request = await axios.get(baseUrl, config)
+
+	const booksUrl = request.data.map((e: { bookUrl: string }) => e.bookUrl)
+	return booksUrl
 }
 
-const getAll = () => {
-	const request = axios.get(baseUrl, config).then((response) => response.data)
+const create = async (bookObject: IBook, token: string | null) => {
+	const config = {
+		headers: { Authorization: token },
+	}
 
-	return request
-}
-
-const create = async (bookObject: IBook) => {
 	const response = await axios
 		.post(baseUrl, bookObject, config)
 		.then((response) => response.data)
@@ -35,6 +38,6 @@ const create = async (bookObject: IBook) => {
 	return response
 }
 
-const bookService = { getAll, create, setToken }
+const bookService = { getAll, create }
 
 export default bookService

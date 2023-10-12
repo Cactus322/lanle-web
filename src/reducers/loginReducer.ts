@@ -2,6 +2,7 @@ import { Dispatch, PayloadAction, createSlice } from '@reduxjs/toolkit'
 import loginService from '@/services/login'
 import { IUser } from '@/types'
 import { IDispatchLoginString, ILoginSlice } from './loginReducer.types'
+import bookService from '@/services/books'
 
 const loginSlice = createSlice({
 	name: 'login',
