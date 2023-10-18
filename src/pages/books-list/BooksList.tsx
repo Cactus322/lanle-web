@@ -5,6 +5,8 @@ import { IBookSlice } from './BookList.types'
 import AddIcon from '@mui/icons-material/Add'
 import { blueGrey } from '@mui/material/colors'
 import { Key } from 'react'
+import { FileUpload } from '@mui/icons-material'
+import { FileUploader } from '@/components/FileUploader/FileUploader'
 
 const BooksList = ({ book }: { book: [string] }) => {
 	return (
@@ -21,23 +23,13 @@ const BooksList = ({ book }: { book: [string] }) => {
 				}}
 			>
 				{book.map((b) => (
-					<Link
-						href={{ pathname: '/reader', query: { book: b } }}
-						key={b}
-					>
-						<Button
-							sx={{
-								width: 125,
-								height: 150,
-								backgroundColor: blueGrey['A400'],
-								'&:hover': {
-									backgroundColor: blueGrey['A700'],
-								},
-							}}
-						>
-							<AddIcon color="action" sx={{ fontSize: 40 }} />
-						</Button>
-					</Link>
+					<Box>
+						<FileUploader />
+						<Link
+							href={{ pathname: '/reader', query: { book: b } }}
+							key={b}
+						>{b}</Link>
+					</Box>
 				))}
 			</Stack>
 		</Box>
