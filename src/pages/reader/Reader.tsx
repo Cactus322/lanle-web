@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import {
 	ReactReader,
 	ReactReaderStyle,
@@ -8,25 +8,17 @@ import {
 } from 'react-reader'
 import { connect } from 'react-redux'
 import { Rendition, Contents } from 'epubjs'
+import { IRendetionCurrent, ISelectedText } from './Reader.types'
+import { Close } from '@mui/icons-material'
 type ITheme = 'light' | 'dark'
 
 export const Reader = ({ book }: { book: string }) => {
-	interface ISelectedText {
-		text: string
-		cfiRange: string
-	}
-	console.log(ReactReaderStyle)
-
-	interface IRendetionCurrent extends Rendition {
-		current: any
-	}
-
+	const [selectionPopup, setSelectionPopup] = useState<boolean>(true)
 	const [location, setLocation] = useState<string | number>(2)
 	const rendition = useRef<Rendition | undefined>(undefined)
 	const [theme, setTheme] = useState<ITheme>('dark')
 
 	const [selections, setSelections] = useState<ISelectedText[]>([])
-	console.log(selections);
 	const renditionRef = useRef<any>(null)
 
 	const setRenderSelection = (cfiRange: string, contents: Contents) => {
@@ -50,7 +42,6 @@ export const Reader = ({ book }: { book: string }) => {
 					'mix-blend-mode': 'multiply',
 				}
 			)
-			// contents.window.getSelection().removeAllRanges()
 			const selection = contents.window.getSelection()
 			selection?.removeAllRanges()
 		}
@@ -58,6 +49,8 @@ export const Reader = ({ book }: { book: string }) => {
 
 	useEffect(() => {
 		if (renditionRef.current) {
+			selections.length && setSelectionPopup(false)
+
 			renditionRef.current.on('selected', setRenderSelection)
 			return () => {
 				renditionRef.current.off('selected', setRenderSelection)
@@ -101,6 +94,7 @@ export const Reader = ({ book }: { book: string }) => {
 			...ReactReaderStyle.readerArea,
 			backgroundColor: '#1d1d2f',
 			transition: undefined,
+			filter: !selectionPopup ? 'brightness(40%)' : '',
 		},
 		titleArea: {
 			...ReactReaderStyle.titleArea,
@@ -136,13 +130,47 @@ export const Reader = ({ book }: { book: string }) => {
 		},
 	}
 
+	console.log(selectionPopup)
+
 	return (
 		<>
 			<Box sx={{ height: '100vh' }}>
-				<Box className="border border-stone-400 bg-white min-h-[100px] p-2 rounded">
-					<Typography component="h2" className="font-bold mb-1">
-						Selections
-					</Typography>
+				<ReactReader
+					url={book}
+					readerStyles={
+						theme === 'dark' ? darkReaderTheme : lightReaderTheme
+					}
+					location={location}
+					locationChanged={(loc: string) => setLocation(loc)}
+					getRendition={(_rendition: IRendetionCurrent) => {
+						updateTheme(_rendition, theme)
+						_rendition.current = rendition
+
+						renditionRef.current = _rendition
+						renditionRef.current.themes.default({
+							'::selection': {
+								background: 'orange',
+							},
+						})
+						setSelections([])
+					}}
+				/>
+				<Box
+					hidden={selectionPopup}
+					sx={{
+						backgroundColor: '#1d1d2a',
+						position: 'fixed',
+						bottom: 0,
+						width: '100%',
+						height: 200,
+						borderTopRightRadius: '10px',
+						borderTopLeftRadius: '10px',
+						zIndex: 50,
+					}}
+				>
+					<Button>
+						<Close sx={{color: 'white'}}/>
+					</Button>
 					<ul className="grid grid-cols-1 divide-y divide-stone-400 border-t border-stone-400 -mx-2">
 						{selections.map(({ text, cfiRange }, i) => (
 							<li key={i} className="p-2">
@@ -176,65 +204,7 @@ export const Reader = ({ book }: { book: string }) => {
 						))}
 					</ul>
 				</Box>
-				<ReactReader
-					url={book}
-					readerStyles={
-						theme === 'dark' ? darkReaderTheme : lightReaderTheme
-					}
-					location={location}
-					locationChanged={(loc: string) => setLocation(loc)}
-					getRendition={(_rendition: IRendetionCurrent) => {
-						updateTheme(_rendition, theme)
-						_rendition.current = rendition
-
-						renditionRef.current = _rendition
-						renditionRef.current.themes.default({
-							'::selection': {
-								background: 'orange',
-							},
-						})
-						setSelections([])
-					}}
-				/>
 			</Box>
-			{/* <Box
-				style={{
-					position: 'absolute',
-					bottom: '1rem',
-					right: '1rem',
-					zIndex: 1,
-					backgroundColor: 'white',
-				}}
-			>
-				Selection:
-				<ul>
-					{selections.map(({ text, cfiRange }, i: number) => (
-						<li key={i}>
-							{text}{' '}
-							<button
-								onClick={() => {
-									renditionRef.current.display(cfiRange)
-								}}
-							>
-								Show
-							</button>
-							<button
-								onClick={() => {
-									renditionRef.current.annotations.remove(
-										cfiRange,
-										'highlight'
-									)
-									setSelections(
-										selections.filter((item, j) => j !== i)
-									)
-								}}
-							>
-								x
-							</button>
-						</li>
-					))}
-				</ul>
-			</Box> */}
 		</>
 	)
 }
