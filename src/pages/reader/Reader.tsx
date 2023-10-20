@@ -18,17 +18,16 @@ export const Reader = ({ book }: { book: string }) => {
 	const rendition = useRef<Rendition | undefined>(undefined)
 	const [theme, setTheme] = useState<ITheme>('dark')
 
-	const [selections, setSelections] = useState<ISelectedText[]>([])
+	const [selections, setSelections] = useState<ISelectedText | null>(null)
 	const renditionRef = useRef<any>(null)
 
 	const setRenderSelection = (cfiRange: string, contents: Contents) => {
 		if (renditionRef.current) {
-			setSelections(
-				selections.concat({
-					text: renditionRef.current.getRange(cfiRange).toString(),
-					cfiRange,
-				})
-			)
+			const textObj = {
+				text: renditionRef.current.getRange(cfiRange).toString(),
+				cfiRange,
+			}
+			setSelections(textObj)
 
 			renditionRef.current.annotations.add(
 				'highlight',
@@ -49,7 +48,7 @@ export const Reader = ({ book }: { book: string }) => {
 
 	useEffect(() => {
 		if (renditionRef.current) {
-			selections.length && setSelectionPopup(false)
+			selections && setSelectionPopup(false)
 
 			renditionRef.current.on('selected', setRenderSelection)
 			return () => {
@@ -132,6 +131,10 @@ export const Reader = ({ book }: { book: string }) => {
 
 	console.log(selectionPopup)
 
+	const handleClose = () => {
+		setSelectionPopup(true)
+	}
+
 	return (
 		<>
 			<Box sx={{ height: '100vh' }}>
@@ -152,7 +155,7 @@ export const Reader = ({ book }: { book: string }) => {
 								background: 'orange',
 							},
 						})
-						setSelections([])
+						setSelections(null)
 					}}
 				/>
 				<Box
@@ -168,11 +171,14 @@ export const Reader = ({ book }: { book: string }) => {
 						zIndex: 50,
 					}}
 				>
-					<Button>
-						<Close sx={{color: 'white'}}/>
+					<Button
+						onClick={handleClose}
+						sx={{ position: 'absolute', right: 0 }}
+					>
+						<Close sx={{ color: 'white' }} />
 					</Button>
 					<ul className="grid grid-cols-1 divide-y divide-stone-400 border-t border-stone-400 -mx-2">
-						{selections.map(({ text, cfiRange }, i) => (
+						{/* {selections.map(({ text, cfiRange }, i) => (
 							<li key={i} className="p-2">
 								<span>{text}</span>
 								<button
@@ -201,7 +207,8 @@ export const Reader = ({ book }: { book: string }) => {
 									Remove
 								</button>
 							</li>
-						))}
+						))} */}
+						<p>{selections?.text}</p>
 					</ul>
 				</Box>
 			</Box>
