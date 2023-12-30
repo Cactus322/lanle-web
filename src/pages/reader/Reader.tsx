@@ -9,7 +9,9 @@ import {
 import { connect } from 'react-redux'
 import { Rendition, Contents } from 'epubjs'
 import { IRendetionCurrent, ISelectedText } from './Reader.types'
-import { Close } from '@mui/icons-material'
+import { AddRounded, CloseRounded } from '@mui/icons-material'
+import translateService from '@/services/translate'
+import dictionaryService from '@/services/dictionary'
 type ITheme = 'light' | 'dark'
 
 export const Reader = ({ book }: { book: string }) => {
@@ -17,6 +19,7 @@ export const Reader = ({ book }: { book: string }) => {
 	const [location, setLocation] = useState<string | number>(2)
 	const rendition = useRef<Rendition | undefined>(undefined)
 	const [theme, setTheme] = useState<ITheme>('dark')
+	const [translatedText, setTranslatedText] = useState<string>('Привет')
 
 	const [selections, setSelections] = useState<ISelectedText | null>(null)
 	const renditionRef = useRef<any>(null)
@@ -48,9 +51,12 @@ export const Reader = ({ book }: { book: string }) => {
 
 	useEffect(() => {
 		if (renditionRef.current) {
-			selections && setSelectionPopup(false)
+			selections?.text && setSelectionPopup(false)
 
 			renditionRef.current.on('selected', setRenderSelection)
+
+			// console.log(translateService.translate(selections?.text));
+
 			return () => {
 				renditionRef.current.off('selected', setRenderSelection)
 			}
@@ -129,8 +135,6 @@ export const Reader = ({ book }: { book: string }) => {
 		},
 	}
 
-	console.log(selectionPopup)
-
 	const handleClose = () => {
 		setSelectionPopup(true)
 	}
@@ -155,7 +159,8 @@ export const Reader = ({ book }: { book: string }) => {
 								background: 'orange',
 							},
 						})
-						setSelections(null)
+
+						setSelections(_rendition)
 					}}
 				/>
 				<Box
@@ -175,7 +180,7 @@ export const Reader = ({ book }: { book: string }) => {
 						onClick={handleClose}
 						sx={{ position: 'absolute', right: 0 }}
 					>
-						<Close sx={{ color: 'white' }} />
+						<CloseRounded sx={{ color: 'white' }} />
 					</Button>
 					<ul className="grid grid-cols-1 divide-y divide-stone-400 border-t border-stone-400 -mx-2">
 						{/* {selections.map(({ text, cfiRange }, i) => (
@@ -208,8 +213,28 @@ export const Reader = ({ book }: { book: string }) => {
 								</button>
 							</li>
 						))} */}
-						<p>{selections?.text}</p>
 					</ul>
+					<Typography variant="body1">
+						{selections?.text} - {translatedText}
+					</Typography>
+					<Button
+						onClick={() =>
+							dictionaryService.create(
+								{ wordEn: 'Hello', wordRu: 'Привет' },
+								'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY0ZDkyOWQ2ODg3OTQ3NjNjOTQ3NDMwYiIsImlhdCI6MTY5NjE3NDMwMn0.mzDWdEqHNxldLo9fXYDKCVS4K0lTYnU_ceKYbIVJ6Mw'
+							)
+						}
+					>
+						<AddRounded />
+						<Typography
+							variant="body2"
+							sx={{
+								textTransform: 'lowercase',
+							}}
+						>
+							в словарь
+						</Typography>
+					</Button>
 				</Box>
 			</Box>
 		</>

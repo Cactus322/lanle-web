@@ -1,10 +1,12 @@
 import { Rendition } from 'epubjs'
 
-export interface ISelectedText {
+export interface ISelectedText  {
     text: string
     cfiRange: string
 }
 
 export interface IRendetionCurrent extends Rendition {
     current: any
+    text: string
+    cfiRange: string
 }

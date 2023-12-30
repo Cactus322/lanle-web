@@ -5,6 +5,7 @@ import registrationReduser from '@/reducers/registrationReduser'
 import { Action, configureStore } from '@reduxjs/toolkit'
 import thunk, { ThunkAction } from 'redux-thunk'
 import { createWrapper } from 'next-redux-wrapper'
+import dictionaryReducer from '@/reducers/dictionaryReducer'
 
 export function makeStore() {
 	return configureStore({
@@ -13,6 +14,7 @@ export function makeStore() {
 			registration: registrationReduser,
 			notice: noticeReducer,
 			book: bookReducer,
+			dictionary: dictionaryReducer,
 		},
 		middleware: [thunk],
 	})

@@ -6,6 +6,7 @@ export const Home = () => {
 		<Box>
 			<Link href="/add-book">Add Book</Link>
 			<Link href="/books-list">My books</Link>
+			<Link href="/dictionary">Dictionary</Link>
 		</Box>
 	)
 }
